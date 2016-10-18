@@ -7,53 +7,103 @@
 
 		 body {
 			 background: linear-gradient( 45deg, red, blue );
-			 height: 100vh;
-			 padding: 50px;
+			 font-family: arial;
+			 color: #324
+		 }
+
+		 main {
+			 max-width: 75%;
+			 margin: 0 auto;
 			 display: flex;
 			 flex-wrap: wrap;
+			 justify-content: space-around;
 		 }
 
 		 section {
 			 margin: 50px;
-			 background: linear-gradient( 45deg, steelblue, lavender );
 			 height: 200px;
 			 width: 200px;
 			 line-height: 200px;
 			 border-radius: 50%;
 			 text-align: center;
 			 font-size: 4em;
+			 cursor: pointer;
+			 transition: width .5s ease, border-radius .1s ease, backround 2s, box-shadow 2s;
+			 z-index: 2;
+		 }
+
+		 section::before {
+			 border-radius: 50%;
+			 color: black;
+			 z-index: 50;
 		 }
 
 		 section:nth-child(1) {
 			 background: linear-gradient( 60deg, tomato, papayawhip );
+			 box-shadow: inset 80px 90px 50px hotpink, 80px 90px 50px lawngreen;
 		 }
 
-		 section:nth-child(2) {
+		 section:nth-child(2n) {
 			 background: linear-gradient( 245deg, skyblue, navajowhite );
+			 box-shadow: inset 80px -150px 50px hotpink, 80px -150px 50px lawngreen;
 		 }
 
-		 section:nth-child(3) {
+		 section:nth-child(3n) {
 			 background: linear-gradient( 25deg, mediumaquamarine, darkviolet );
+			 box-shadow: inset 80px 300px 50px hotpink, 80px 300px 50px lawngreen;
 		 }
 
-		 section:nth-child(4) {
+		 section:nth-child(5n) {
 			 background: linear-gradient( 90deg, firebrick, pink );
+			 box-shadow: inset 80px 180px 50px hotpink, 80px 180px 50px lawngreen;
+		 }
+
+		 section:nth-child(7n) {
+			 background: linear-gradient( 45deg, steelblue, lavender );
+			 box-shadow: inset 80px 30px 50px hotpink, 80px 30px 50px lawngreen;
+		 }
+
+		 iframe {
+			 border: none;
 		 }
 
 		</style>
 	</head>
 	<body>
-		<section>
-			1
+
+		<section data-mix-url="https://www.mixcloud.com/widget/iframe/?feed=https%3A%2F%2Fwww.mixcloud.com%2FNTSRadio%2Fsuncut-21st-march-2016%2F&hide_cover=1&mini=1">
+			<h1>#1</h1>
 		</section>
-		<section>
-			2
-		</section>
-		<section>
-			3
-		</section>
-		<section>
-			4
-		</section>
+		<section><h1>#2</h1></section>
+		<section><h1>#3</h1></section>
+		<section><h1>#4</h1></section>
+		<section><h1>#5</h1></section>
+		<section><h1>#6</h1></section>
+		<section><h1>#7</h1></section>
+
 	</body>
+	<script>
+
+	 function fullscreen (el) {
+		 el.style.width = '90%';
+		 el.style.borderRadius = '0';
+		 el.dataset.fullscreen = 'true';
+	 }
+
+	 function reset (el) {
+		 el.style.width = '200px';
+		 delete el.dataset.fullscreen;
+	 }
+
+	 Array.from(document.querySelectorAll('section'))
+		  .forEach(el => el.addEventListener('click', e => {
+			  let el = e.target;
+			  if (el.tagName === 'H1') {
+				  el = el.parentNode;
+			  }
+			  el.dataset.fullscreen ? reset(el) : fullscreen(el);
+		  })
+		  );
+
+	</script>
 </html>
