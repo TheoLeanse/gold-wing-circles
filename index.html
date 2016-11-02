@@ -88,7 +88,7 @@
 			 position: fixed;
 			 bottom: 0;
 			 width: 90vw;
-			 min-height: 0px;
+			 min-height: 75px;
 			 transition: height .75s ease;
 			 background: rgba(125, 255, 0, 0.34);
 			 box-shadow: 50px -15px 50px hotpink;
@@ -131,11 +131,6 @@
 
 		<section data-audio-src="audio/ialp-life-finds-a-way.mp3" data-description="When Gold Wing and the In A Lonely Place folks did a party promo"><h1>#7</h1></section>
 
-		<div class="player">
-			<div class="close-button">Close</div>
-			<p class="audio-description"></p>
-		</div>
-
 	</body>
 
 	<script>
@@ -145,14 +140,38 @@
 	 function init () {
 		 const sectionButtons = document.querySelectorAll('section');
 		 setupButtons(sectionButtons);
+	 }
 
-		 const player = document.querySelector('.player');
-		 const playerCloseButton = document.querySelector('.close-button');
-		 setupPlayerClose(player, playerCloseButton)
+	 function setUpPlayer (opts={}) {
+		 const oldPlayer = document.querySelector('.player');
+		 if (oldPlayer) document.body.removeChild(oldPlayer);
+
+		 const player = document.createElement('div');
+		 player.className = 'player'
+
+		 const closeButton = document.createElement('div');
+		 closeButton.className = 'close-button';
+		 closeButton.textContent = 'Close';
+		 closeButton.addEventListener('click', () => {
+			 document.body.removeChild(player);
+		 })
+
+		 const audioDescription = document.createElement('p');
+		 audioDescription.className = 'audio-description';
+		 audioDescription.textContent = opts.description;
+
+		 const audio = document.createElement('audio')
+		 audio.autoplay = true;
+		 audio.src = opts.audioSrc;
+
+		 document.body.appendChild(player);
+
+		 player.appendChild(audio);
+		 player.appendChild(closeButton);
+		 player.appendChild(audioDescription);
 	 }
 
 	 function setupButtons (DOMNodes) {
-		 const PLAYER = document.querySelector('.player');
 		 const fullscreen = el => {
 			 el.style.width = '80vw';
 			 el.style.borderRadius = '0';
@@ -162,37 +181,12 @@
 			 el.style.width = '200px';
 			 delete el.dataset.fullscreen;
 		 }
-		 const addAudio = el => {
-			 const audioEls = PLAYER.getElementsByTagName('audio');
-			 if (audioEls.length) {
-				 Array.from(audioEls)
-					  .forEach(oldAudio => PLAYER.removeChild(oldAudio));
-			 };
-			 const audio = document.createElement('audio')
-			 audio.autoplay = true;
-			 audio.src = el.dataset.audioSrc;
-			 PLAYER.getElementsByClassName('audio-description')[0]
-				  .textContent = el.dataset.description;
-			 PLAYER.appendChild(audio);
-		 }
-
 		 Array.from(DOMNodes).forEach(el => {
-			 const ensureSection = el =>  el.tagName === 'H1' ? el.parentNode : el;
-			 el.addEventListener('mouseover', e => fullscreen(ensureSection(el)));
-			 el.addEventListener('mouseleave', e => reset(ensureSection(el)));
-			 el.addEventListener('click', e => {
-				 PLAYER.style.minHeight = '75px';
-				 addAudio(ensureSection(el))
-			 });
+			 el = el.tagName === 'H1' ? el.parentNode : el;
+			 el.addEventListener('mouseover', e => fullscreen(el));
+			 el.addEventListener('mouseleave', e => reset(el));
+			 el.addEventListener('click', e => setUpPlayer(el.dataset));
 		 });
-	 }
-
-	 function setupPlayerClose (player, closeButton) {
-		 closeButton.addEventListener('click', () => {
-			 player.style.minHeight = '0px';
-			 Array.from(player.getElementsByTagName('audio'))
-				  .forEach(el => player.removeChild(el));
-		 })
 	 }
 
 	</script>
