@@ -109,19 +109,19 @@
 	</head>
 	<body>
 
-		<section><h1>#1</h1></section>
+		<section data-audio-src="audio/gold-wing-gottwood.mp3"><h1>#1</h1></section>
 
-		<section><h1>#2</h1></section>
+		<section data-audio-src="audio/gold-wing-suncut-1.m4a"><h1>#2</h1></section>
 
-		<section><h1>#3</h1></section>
+		<section data-audio-src="audio/gold-wing-cherrie-flava-suncut-1.m4a"><h1>#3</h1></section>
 
-		<section><h1>#4</h1></section>
+		<section data-audio-src="audio/gold-wing-someone-special.mp3"><h1>#4</h1></section>
 
-		<section><h1>#5</h1></section>
+		<section data-audio-src="audio/gold-wing-cherrie-flava-suncut-2.m4a"><h1>#5</h1></section>
 
-		<section><h1>#6</h1></section>
+		<section data-audio-src="audio/ialp-ransom-note.m4a"><h1>#6</h1></section>
 
-		<section><h1>#7</h1></section>
+		<section data-audio-src="audio/ialp-life-finds-a-way.mp3"><h1>#7</h1></section>
 
 		<div class="player">
 			<div class="close-button">Close</div>
@@ -153,18 +153,36 @@
 			 el.style.width = '200px';
 			 delete el.dataset.fullscreen;
 		 }
+		 const addAudio = el => {
+			 const audioEls = PLAYER.getElementsByTagName('audio');
+			 if (audioEls.length) {
+				 Array.from(audioEls)
+					  .forEach(oldAudio => PLAYER.removeChild(oldAudio));
+			 };
+			 const audio = document.createElement('audio')
+			 audio.autoplay = true;
+			 audio.controls = true;
+			 audio.style.width = '100%';
+			 audio.src = el.dataset.audioSrc;
+			 PLAYER.appendChild(audio);
+		 }
 
 		 Array.from(DOMNodes).forEach(el => {
 			 const ensureSection = el =>  el.tagName === 'H1' ? el.parentNode : el;
 			 el.addEventListener('mouseover', e => fullscreen(ensureSection(el)));
 			 el.addEventListener('mouseleave', e => reset(ensureSection(el)));
-			 el.addEventListener('click', e => PLAYER.style.height = '75px');
+			 el.addEventListener('click', e => {
+				 PLAYER.style.height = '75px';
+				 addAudio(ensureSection(el))
+			 });
 		 });
 	 }
 
 	 function setupPlayerClose (player, closeButton) {
 		 closeButton.addEventListener('click', () => {
 			 player.style.height = '0px';
+			 Array.from(player.getElementsByTagName('audio'))
+				  .forEach(el => player.removeChild(el));
 		 })
 	 }
 
