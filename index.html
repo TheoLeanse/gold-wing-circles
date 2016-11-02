@@ -90,6 +90,7 @@
 			 font-family: cursive;
 			 padding: calc(1em + 1vw);
 			 margin: 0;
+			 cursor: pointer;
 		 }
 
 		</style>
@@ -133,13 +134,14 @@
 			 document.body.removeChild(player);
 		 })
 
-		 const audioDescription = document.createElement('p');
-		 audioDescription.className = 'audio-description';
-		 audioDescription.textContent = opts.description;
-
 		 const audio = document.createElement('audio')
 		 audio.autoplay = true;
 		 audio.src = `http://www.gggoldwinggg.com/${opts.audioSrc}`;
+
+		 const audioDescription = document.createElement('p');
+		 audioDescription.className = 'audio-description';
+		 audioDescription.textContent = opts.description;
+		 audioDescription.addEventListener('click', () => audio.paused ? audio.play() : audio.pause());
 
 		 document.body.appendChild(player);
 
