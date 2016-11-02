@@ -104,27 +104,34 @@
 			 text-shadow: 0 0 1em blue;
 		 }
 
+		 .audio-description {
+			 color: lawngreen;
+			 text-shadow: 0 0 1em hotpink;
+			 text-align: center;
+		 }
+
 		</style>
 
 	</head>
 	<body>
 
-		<section data-audio-src="audio/gold-wing-gottwood.mp3"><h1>#1</h1></section>
+		<section data-audio-src="audio/gold-wing-gottwood.mp3" data-description="Gold Wing recording an In A Lonely Place set for Gottwood Festival"><h1>#1</h1></section>
 
-		<section data-audio-src="audio/gold-wing-suncut-1.m4a"><h1>#2</h1></section>
+		<section data-audio-src="audio/gold-wing-suncut-1.m4a" data-description="Gold Wing covering Suncut on NTS solo"><h1>#2</h1></section>
 
-		<section data-audio-src="audio/gold-wing-cherrie-flava-suncut-1.m4a"><h1>#3</h1></section>
+		<section data-audio-src="audio/gold-wing-cherrie-flava-suncut-1.m4a" data-description="Gold Wing covering Suncut on NTS with Cherrie Flava"><h1>#3</h1></section>
 
-		<section data-audio-src="audio/gold-wing-someone-special.mp3"><h1>#4</h1></section>
+		<section data-audio-src="audio/gold-wing-someone-special.mp3" data-description="a devotional"><h1>#4</h1></section>
 
-		<section data-audio-src="audio/gold-wing-cherrie-flava-suncut-2.m4a"><h1>#5</h1></section>
+		<section data-audio-src="audio/gold-wing-cherrie-flava-suncut-2.m4a" data-description="Gold Wing covering Suncut on NTS with Cherrie Flava, again"><h1>#5</h1></section>
 
-		<section data-audio-src="audio/ialp-ransom-note.m4a"><h1>#6</h1></section>
+		<section data-audio-src="audio/ialp-ransom-note.m4a" data-description="an In A Lonely Place set for Ransom Note"><h1>#6</h1></section>
 
-		<section data-audio-src="audio/ialp-life-finds-a-way.mp3"><h1>#7</h1></section>
+		<section data-audio-src="audio/ialp-life-finds-a-way.mp3" data-description="an In A Lonely Place party promo"><h1>#7</h1></section>
 
 		<div class="player">
 			<div class="close-button">Close</div>
+			<p class="audio-description"></p>
 		</div>
 
 	</body>
@@ -161,9 +168,9 @@
 			 };
 			 const audio = document.createElement('audio')
 			 audio.autoplay = true;
-			 audio.controls = true;
-			 audio.style.width = '100%';
 			 audio.src = el.dataset.audioSrc;
+			 PLAYER.getElementsByClassName('audio-description')[0]
+				  .textContent = el.dataset.description;
 			 PLAYER.appendChild(audio);
 		 }
 
