@@ -1,6 +1,5 @@
 <!doctype html>
 <html>
-
 	<head>
 		<title>Gold Wing</title>
 		<meta charset="utf-8" />
@@ -23,16 +22,6 @@
 			 justify-content: space-around;
 		 }
 
-		 .intro-text {
-			 font-family: cursive;
-			 position: fixed;
-			 bottom: 50px;
-			 right: 10px;
-			 text-align: right;
-			 font-size: 40px;
-			 font-weight: 100;
-		 }
-
 		 section {
 			 margin: 50px;
 			 height: 200px;
@@ -43,12 +32,6 @@
 			 font-size: 4em;
 			 cursor: pointer;
 			 transition: width 1s ease, border-radius .1s ease, backround 2s, box-shadow 2s;
-		 }
-
-		 section::before {
-			 border-radius: 50%;
-			 color: black;
-			 z-index: 50;
 		 }
 
 		 section:nth-child(1) {
@@ -76,10 +59,6 @@
 			 box-shadow: inset 80px 30px 50px hotpink, 80px 30px 50px lawngreen;
 		 }
 
-		 iframe {
-			 border: none;
-		 }
-
 		 h1 {
 			 text-shadow: 0 0 1em blue;
 		 }
@@ -88,7 +67,7 @@
 			 position: fixed;
 			 bottom: 0;
 			 width: 90vw;
-			 height: 0px;
+			 min-height: 75px;
 			 transition: height .75s ease;
 			 background: rgba(125, 255, 0, 0.34);
 			 box-shadow: 50px -15px 50px hotpink;
@@ -109,14 +88,13 @@
 			 text-shadow: 0 0 1em blue;
 			 font-size: calc(1em + 1vw);
 			 font-family: cursive;
-			 padding-left: 70px;
+			 padding: calc(1em + 1vw);
+			 margin: 0;
 		 }
 
 		</style>
-
 	</head>
 	<body>
-
 		<section data-audio-src="audio/gold-wing-gottwood.mp3" data-description="When Gold Wing did an In A Lonely Place set for Gottwood Festival"><h1>#1</h1></section>
 
 		<section data-audio-src="audio/gold-wing-suncut-1.m4a" data-description="When Gold Wing covered Suncut on NTS"><h1>#2</h1></section>
@@ -130,12 +108,6 @@
 		<section data-audio-src="audio/ialp-ransom-note.m4a" data-description="When Gold Wing and the In A Lonely Place folks did a set for Ransom Note"><h1>#6</h1></section>
 
 		<section data-audio-src="audio/ialp-life-finds-a-way.mp3" data-description="When Gold Wing and the In A Lonely Place folks did a party promo"><h1>#7</h1></section>
-
-		<div class="player">
-			<div class="close-button">Close</div>
-			<p class="audio-description"></p>
-		</div>
-
 	</body>
 
 	<script>
@@ -145,14 +117,38 @@
 	 function init () {
 		 const sectionButtons = document.querySelectorAll('section');
 		 setupButtons(sectionButtons);
+	 }
 
-		 const player = document.querySelector('.player');
-		 const playerCloseButton = document.querySelector('.close-button');
-		 setupPlayerClose(player, playerCloseButton)
+	 function setUpPlayer (opts={}) {
+		 const oldPlayer = document.querySelector('.player');
+		 if (oldPlayer) document.body.removeChild(oldPlayer);
+
+		 const player = document.createElement('div');
+		 player.className = 'player'
+
+		 const closeButton = document.createElement('div');
+		 closeButton.className = 'close-button';
+		 closeButton.textContent = 'Close';
+		 closeButton.addEventListener('click', () => {
+			 document.body.removeChild(player);
+		 })
+
+		 const audioDescription = document.createElement('p');
+		 audioDescription.className = 'audio-description';
+		 audioDescription.textContent = opts.description;
+
+		 const audio = document.createElement('audio')
+		 audio.autoplay = true;
+		 audio.src = opts.audioSrc;
+
+		 document.body.appendChild(player);
+
+		 player.appendChild(audio);
+		 player.appendChild(closeButton);
+		 player.appendChild(audioDescription);
 	 }
 
 	 function setupButtons (DOMNodes) {
-		 const PLAYER = document.querySelector('.player');
 		 const fullscreen = el => {
 			 el.style.width = '80vw';
 			 el.style.borderRadius = '0';
@@ -162,37 +158,12 @@
 			 el.style.width = '200px';
 			 delete el.dataset.fullscreen;
 		 }
-		 const addAudio = el => {
-			 const audioEls = PLAYER.getElementsByTagName('audio');
-			 if (audioEls.length) {
-				 Array.from(audioEls)
-					  .forEach(oldAudio => PLAYER.removeChild(oldAudio));
-			 };
-			 const audio = document.createElement('audio')
-			 audio.autoplay = true;
-			 audio.src = 'http://www.gggoldwinggg.com/' + el.dataset.audioSrc;
-			 PLAYER.getElementsByClassName('audio-description')[0]
-				  .textContent = el.dataset.description;
-			 PLAYER.appendChild(audio);
-		 }
-
 		 Array.from(DOMNodes).forEach(el => {
-			 const ensureSection = el =>  el.tagName === 'H1' ? el.parentNode : el;
-			 el.addEventListener('mouseover', e => fullscreen(ensureSection(el)));
-			 el.addEventListener('mouseleave', e => reset(ensureSection(el)));
-			 el.addEventListener('click', e => {
-				 PLAYER.style.height = '75px';
-				 addAudio(ensureSection(el))
-			 });
+			 el = el.tagName === 'H1' ? el.parentNode : el;
+			 el.addEventListener('mouseover', e => fullscreen(el));
+			 el.addEventListener('mouseleave', e => reset(el));
+			 el.addEventListener('click', e => setUpPlayer(el.dataset));
 		 });
-	 }
-
-	 function setupPlayerClose (player, closeButton) {
-		 closeButton.addEventListener('click', () => {
-			 player.style.height = '0px';
-			 Array.from(player.getElementsByTagName('audio'))
-				  .forEach(el => player.removeChild(el));
-		 })
 	 }
 
 	</script>
