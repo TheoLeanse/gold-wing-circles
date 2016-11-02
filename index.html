@@ -88,7 +88,7 @@
 			 position: fixed;
 			 bottom: 0;
 			 width: 90vw;
-			 height: 0px;
+			 min-height: 0px;
 			 transition: height .75s ease;
 			 background: rgba(125, 255, 0, 0.34);
 			 box-shadow: 50px -15px 50px hotpink;
@@ -109,7 +109,8 @@
 			 text-shadow: 0 0 1em blue;
 			 font-size: calc(1em + 1vw);
 			 font-family: cursive;
-			 padding-left: 1em;
+			 padding: calc(1em + 1vw);
+			 margin: 0;
 		 }
 
 		</style>
@@ -180,7 +181,7 @@
 			 el.addEventListener('mouseover', e => fullscreen(ensureSection(el)));
 			 el.addEventListener('mouseleave', e => reset(ensureSection(el)));
 			 el.addEventListener('click', e => {
-				 PLAYER.style.height = '75px';
+				 PLAYER.style.minHeight = '75px';
 				 addAudio(ensureSection(el))
 			 });
 		 });
@@ -188,7 +189,7 @@
 
 	 function setupPlayerClose (player, closeButton) {
 		 closeButton.addEventListener('click', () => {
-			 player.style.height = '0px';
+			 player.style.minHeight = '0px';
 			 Array.from(player.getElementsByTagName('audio'))
 				  .forEach(el => player.removeChild(el));
 		 })
